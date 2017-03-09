@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <SwitchPreference
+        android:defaultValue="false"
+        android:key="switch_proximity"
+        android:summary="@string/desc_proximity"
+        android:title="@string/title_proximity" />
+    <SwitchPreference
+        android:defaultValue="false"
+        android:key="switch_ambient"
+        android:summary="@string/desc_ambient"
+        android:title="@string/title_ambient" />
+    <SwitchPreference
+        android:defaultValue="false"
+        android:key="switch_accelerometer"
+        android:summary="@string/desc_accelerometer"
+        android:title="@string/title_accelerometer" />
+</PreferenceScreen>

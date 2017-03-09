@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">Easy WakeUp</string>
+    <string name="title_proximity">Proximity sensor</string>
+    <string name="desc_proximity">Wake device when you move closer</string>
+
+    <string name="title_ambient">Ambient Light</string>
+    <string name="desc_ambient">Wake device when the ambient light sensor registers a sudden change</string>
+
+    <string name="title_accelerometer">Movement</string>
+    <string name="desc_accelerometer">Wake device when you move it</string>
+
+</resources>
