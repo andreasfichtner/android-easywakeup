@@ -23,7 +23,7 @@ public class BackgroundService extends Service implements SensorEventListener, S
     public static String SCREEN_ON_FLAG = "SCREEN_ON";
 
     // This flag indicates that the screen is on and there is no need to keep the sensors busy.
-    // In that case, we shut down and restart as soon as the screen is switched off.
+    // Default to false, in case we start with the screen off.
     boolean screenOn = false;
 
     // Sensor handling
@@ -41,19 +41,26 @@ public class BackgroundService extends Service implements SensorEventListener, S
 
     @Override
     public IBinder onBind(Intent intent) {
-        screenOn = intent.getBooleanExtra(SCREEN_ON_FLAG, true);
+        screenOn = intent.getBooleanExtra(SCREEN_ON_FLAG, false);
+        handleScreenStatus();
 
-        if(screenOn) {
-            initSensors();
-        } else  {
-            mSensorManager.unregisterListener(this);
-        }
         return null;
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        screenOn = intent.getBooleanExtra(SCREEN_ON_FLAG, false);
+        handleScreenStatus();
+
         return START_STICKY;
+    }
+
+    private void handleScreenStatus() {
+        if(screenOn) {
+            mSensorManager.unregisterListener(this);
+        } else  {
+            initSensors();
+        }
     }
 
     @Override
