@@ -26,6 +26,9 @@ public class BackgroundService extends Service implements SensorEventListener, S
     // Default to false, in case we start with the screen off.
     boolean screenOn = false;
 
+    // Wake lock
+    PowerManager.WakeLock cpuLock = null;
+
     // Sensor handling
     private SensorManager mSensorManager;
     private Sensor proximitySensor;
@@ -58,7 +61,7 @@ public class BackgroundService extends Service implements SensorEventListener, S
 
     private void handleScreenStatus() {
         if(screenOn) {
-            mSensorManager.unregisterListener(this);
+            stopSensors();
         } else  {
             initSensors();
         }
@@ -66,6 +69,7 @@ public class BackgroundService extends Service implements SensorEventListener, S
 
     @Override
     public void onTaskRemoved(Intent rootIntent) {
+        stopSensors();
 
         Intent restartService = new Intent(getApplicationContext(),
                 this.getClass());
@@ -96,12 +100,14 @@ public class BackgroundService extends Service implements SensorEventListener, S
     }
 
     private void initSensors() {
-        mSensorManager.unregisterListener(this);
+
+        stopSensors();
 
         SharedPreferences defaultSharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         boolean checkProximity = defaultSharedPreferences.getBoolean("switch_proximity", false);
         boolean checkLight = defaultSharedPreferences.getBoolean("switch_ambient", false);
         boolean checkAccelerometer = defaultSharedPreferences.getBoolean("switch_accelerometer", false);
+        boolean holdWakelock = defaultSharedPreferences.getBoolean("switch_wakelock", false);
 
         if(checkProximity) {
             proximitySensor = mSensorManager.getDefaultSensor(Sensor.TYPE_PROXIMITY);
@@ -117,6 +123,20 @@ public class BackgroundService extends Service implements SensorEventListener, S
             accelerometerSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION);
             registerForSensorIfExists(accelerometerSensor);
         }
+
+        if(holdWakelock) {
+            PowerManager powerManager = ((PowerManager) getSystemService(Context.POWER_SERVICE));
+            cpuLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "CPU");
+            cpuLock.acquire();
+        }
+    }
+
+    private void stopSensors() {
+        if(cpuLock != null) {
+            cpuLock.release();
+        }
+
+        mSensorManager.unregisterListener(this);
     }
 
     private void registerForSensorIfExists(Sensor sensor) {
@@ -171,10 +191,8 @@ public class BackgroundService extends Service implements SensorEventListener, S
     }
 
     private void wakeupDetected() {
-        Log.d("EasyWakeup", "Wakeup detected");
         PowerManager powerManager = ((PowerManager) getSystemService(Context.POWER_SERVICE));
         PowerManager.WakeLock wake = powerManager.newWakeLock(PowerManager.FULL_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP, "TAG");
-
         wake.acquire();
         wake.release();
     }

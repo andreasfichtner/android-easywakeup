@@ -1,12 +1,18 @@
 <resources>
     <string name="app_name">Easy WakeUp</string>
+    <string name="title_sensors">Sensors</string>
+    <string name="title_advanced">Advanced</string>
+
     <string name="title_proximity">Proximity sensor</string>
-    <string name="desc_proximity">You can wave your hand in front of the display to activate it.</string>
+    <string name="desc_proximity">Put your hand in front of the display to activate</string>
 
     <string name="title_ambient">Ambient Light</string>
-    <string name="desc_ambient">Wake device when the ambient light sensor registers a sudden change. Use this if your device does not have a proximity sensor.</string>
+    <string name="desc_ambient">Activate screen on sudden brightness changes</string>
 
-    <string name="title_accelerometer">Movement</string>
-    <string name="desc_accelerometer">Wake device when you move it. \nHigh battery usage!</string>
+    <string name="title_accelerometer">Movement (high battery usage)</string>
+    <string name="desc_accelerometer">Wake device when you move it</string>
+
+    <string name="title_wakelock">Hold wake lock</string>
+    <string name="desc_wakelock">Activate if sensors stop working a while after turning the screen off. Uses more power.</string>
 
 </resources>
