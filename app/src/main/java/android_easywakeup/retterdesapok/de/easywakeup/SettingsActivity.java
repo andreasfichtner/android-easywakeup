@@ -36,7 +36,9 @@ public class SettingsActivity extends Activity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        mService.unbindService(mConnection);
+        if(mBound && mService != null && mConnection != null) {
+            unbindService(mConnection);
+        }
     }
 
     /** Defines callbacks for service binding, passed to bindService() */

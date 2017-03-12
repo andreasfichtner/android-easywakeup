@@ -44,7 +44,8 @@ public class BackgroundService extends Service implements SensorEventListener, S
         screenOn = intent.getBooleanExtra(SCREEN_ON_FLAG, false);
         handleScreenStatus();
 
-        return null;
+        IBinder binder = new LocalBinder();
+        return binder;
     }
 
     @Override
